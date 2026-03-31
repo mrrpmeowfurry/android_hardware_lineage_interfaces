@@ -36,26 +36,28 @@ cc_binary {
     vendor: true,
     relative_install_path: "hw",
     init_rc: ["vendor.lineage.livedisplay-service.sdm.rc"],
-    vintf_fragments: select(soong_config_variable("livedisplay_sdm", "enable_dm"), {
-        false: [],
-        default: ["vendor.lineage.livedisplay-service.sdm-dm.xml"],
-    }) + select(soong_config_variable("livedisplay_sdm", "enable_pa"), {
-        false: [],
-        default: ["vendor.lineage.livedisplay-service.sdm-pa.xml"],
-    }),
+
+    // FIX: remove broken select() logic
+    vintf_fragments: [
+        "vendor.lineage.livedisplay-service.sdm-dm.xml",
+        "vendor.lineage.livedisplay-service.sdm-pa.xml",
+    ],
+
     cflags: select(soong_config_variable("livedisplay_sdm", "enable_dm"), {
-        false: ["-DENABLE_DM=false"],
+        "false": ["-DENABLE_DM=false"],
         default: ["-DENABLE_DM=true"],
     }) + select(soong_config_variable("livedisplay_sdm", "enable_pa"), {
-        false: ["-DENABLE_PA=false"],
+        "false": ["-DENABLE_PA=false"],
         default: ["-DENABLE_PA=true"],
     }),
+
     srcs: [
         ":vendor.lineage.livedisplay-sdm-dm",
         ":vendor.lineage.livedisplay-sdm-pa",
         ":vendor.lineage.livedisplay-sdm-utils",
         "service.cpp",
     ],
+
     shared_libs: [
         "libbase",
         "libbinder",
@@ -63,6 +65,7 @@ cc_binary {
         "libutils",
         "vendor.lineage.livedisplay-V1-ndk",
     ],
+
     header_libs: [
         "vendor.lineage.livedisplay-sdm-headers",
     ],

@@ -78,9 +78,10 @@ cc_binary {
         any @ flag_val: ["-DHEALTH_CHARGING_CONTROL_CHARGING_DISABLED=\"" + flag_val + "\""],
         default: ["-DHEALTH_CHARGING_CONTROL_CHARGING_DISABLED=\"0\""],
     }) + select(soong_config_variable("lineage_health", "charging_control_supports_bypass"), {
-        true: ["-DHEALTH_CHARGING_CONTROL_SUPPORTS_BYPASS"],
-        false: [],
-        default: ["-DHEALTH_CHARGING_CONTROL_SUPPORTS_BYPASS"],
+        any @ flag_val: [
+		"-DHEALTH_CHARGING_CONTROL_SUPPORTS_BYPASS",
+	],
+	default: [],
     }) + select(soong_config_variable("lineage_health", "charging_control_supports_deadline"), {
         true: ["-DHEALTH_CHARGING_CONTROL_SUPPORTS_DEADLINE"],
         false: [],
